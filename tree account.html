@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شجرة الحسابات المحاسبية - الشكل الكلاسيكي</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            border-bottom: 3px double #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .account-tree {
+            margin: 20px 0;
+        }
+
+        .account-item {
+            margin-bottom: 2px;
+        }
+
+        .account-header {
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            padding: 8px 12px;
+            margin-bottom: 1px;
+            font-size: 14px;
+        }
+
+        .level-1 {
+            background-color: #e8e8e8 !important;
+            border-right: 3px solid #333 !important;
+            font-weight: bold;
+            font-size: 15px !important;
+        }
+
+        .level-2 {
+            background-color: #f0f0f0 !important;
+            border-right: 2px solid #666 !important;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        .level-3 {
+            background-color: #f8f8f8 !important;
+            border-right: 1px solid #999 !important;
+            margin-right: 40px;
+        }
+
+        .level-4 {
+            background-color: #fcfcfc !important;
+            margin-right: 60px;
+            font-style: italic;
+        }
+
+        .account-code {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            background-color: #ddd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid #aaa;
+        }
+
+        .account-children {
+            margin-right: 25px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: 1px solid #999;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .toggle-btn:hover {
+            background-color: #ddd;
+        }
+
+        .search-box {
+            max-width: 300px;
+        }
+
+        .classic-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .classic-table th {
+            background-color: #333;
+            color: white;
+            padding: 8px;
+            border: 1px solid #555;
+        }
+
+        .classic-table td {
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+        }
+
+        .classic-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .print-btn {
+            background-color: #6c757d;
+            color: white;
+            border: 1px solid #5a6268;
+        }
+
+        .print-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-3">
+        <!-- العنوان -->
+        <div class="header text-center">
+            <h2 style="font-weight: bold; color: #333;">شجرة الحسابات المحاسبية</h2>
+            <h5 style="color: #666;">شركة النظم المحاسبية المتطورة</h5>
+            <div style="border-top: 1px solid #ccc; margin-top: 10px; padding-top: 10px;">
+                <span style="color: #888;">تاريخ الطباعة: <span id="printDate"></span></span>
+            </div>
+        </div>
+
+        <!-- شريط الأدوات -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="input-group search-box">
+                    <input type="text" id="searchAccounts" class="form-control" placeholder="ابحث في الحسابات...">
+                    <button class="btn btn-outline-secondary" type="button">
+                        بحث
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6 text-start">
+                <button class="btn btn-secondary" onclick="expandAll()">
+                    فتح الكل
+                </button>
+                <button class="btn btn-outline-secondary ms-2" onclick="collapseAll()">
+                    غلق الكل
+                </button>
+                <button class="btn print-btn ms-2" onclick="window.print()">
+                    طباعة
+                </button>
+            </div>
+        </div>
+
+        <!-- جدول ملخص -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <table class="classic-table">
+                    <thead>
+                        <tr>
+                            <th>نوع الحساب</th>
+                            <th>عدد الحسابات</th>
+                            <th>الكود</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>الأصول</td>
+                            <td>8</td>
+                            <td>100-199</td>
+                        </tr>
+                        <tr>
+                            <td>الخصوم</td>
+                            <td>6</td>
+                            <td>200-299</td>
+                        </tr>
+                        <tr>
+                            <td>حقوق الملكية</td>
+                            <td>5</td>
+                            <td>300-399</td>
+                        </tr>
+                        <tr>
+                            <td>الإيرادات</td>
+                            <td>4</td>
+                            <td>400-499</td>
+                        </tr>
+                        <tr>
+                            <td>المصروفات</td>
+                            <td>12</td>
+                            <td>500-599</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-4">
+                <!-- شجرة الحسابات -->
+                <div class="account-tree" id="accountTree">
+                    <!-- الأصول -->
+                    <div class="account-item">
+                        <div class="account-header level-1">
+                            <span class="account-code">100</span>
+                            <strong>الأصول</strong>
+                            <button class="toggle-btn float-start"
+                                onclick="toggleChildren('assets-children', this)">▼</button>
+                        </div>
+                        <div id="assets-children" class="account-children">
+                            <!-- الأصول الثابتة -->
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">110</span>
+                                    الأصول الثابتة
+                                    <button class="toggle-btn float-start"
+                                        onclick="toggleChildren('fixed-assets-children', this)">▼</button>
+                                </div>
+                                <div id="fixed-assets-children" class="account-children">
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">111</span>
+                                            المباني
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">112</span>
+                                            الأراضي
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">113</span>
+                                            الأثاث والمفروشات
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">114</span>
+                                            السيارات
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">115</span>
+                                            آلات ومعدات
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- الأصول المتداولة -->
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">120</span>
+                                    الأصول المتداولة
+                                    <button class="toggle-btn float-start"
+                                        onclick="toggleChildren('current-assets-children', this)">▼</button>
+                                </div>
+                                <div id="current-assets-children" class="account-children">
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">121</span>
+                                            البنك
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">122</span>
+                                            الصندوق
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">123</span>
+                                            المخزون
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">124</span>
+                                            المدينون
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">125</span>
+                                            أوراق القبض
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- الخصوم -->
+                    <div class="account-item">
+                        <div class="account-header level-1">
+                            <span class="account-code">200</span>
+                            <strong>الخصوم</strong>
+                            <button class="toggle-btn float-start"
+                                onclick="toggleChildren('liabilities-children', this)">▼</button>
+                        </div>
+                        <div id="liabilities-children" class="account-children">
+                            <!-- الخصوم المتداولة -->
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">210</span>
+                                    الخصوم المتداولة
+                                    <button class="toggle-btn float-start"
+                                        onclick="toggleChildren('current-liabilities-children', this)">▼</button>
+                                </div>
+                                <div id="current-liabilities-children" class="account-children">
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">211</span>
+                                            الدائنون
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">212</span>
+                                            أوراق الدفع
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">213</span>
+                                            قروض قصيرة الأجل
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- الخصوم طويلة الأجل -->
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">220</span>
+                                    الخصوم طويلة الأجل
+                                    <button class="toggle-btn float-start"
+                                        onclick="toggleChildren('long-term-liabilities-children', this)">▼</button>
+                                </div>
+                                <div id="long-term-liabilities-children" class="account-children">
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">221</span>
+                                            قروض طويلة الأجل
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- حقوق الملكية -->
+                    <div class="account-item">
+                        <div class="account-header level-1">
+                            <span class="account-code">300</span>
+                            <strong>حقوق الملكية</strong>
+                            <button class="toggle-btn float-start"
+                                onclick="toggleChildren('equity-children', this)">▼</button>
+                        </div>
+                        <div id="equity-children" class="account-children">
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">310</span>
+                                    رأس المال
+                                </div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">320</span>
+                                    جاري صاحب الشركة
+                                </div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">330</span>
+                                    الاحتياطات
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- الإيرادات -->
+                    <div class="account-item">
+                        <div class="account-header level-1">
+                            <span class="account-code">400</span>
+                            <strong>الإيرادات</strong>
+                            <button class="toggle-btn float-start"
+                                onclick="toggleChildren('revenue-children', this)">▼</button>
+                        </div>
+                        <div id="revenue-children" class="account-children">
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">410</span>
+                                    إيرادات النشاط الرئيسي
+                                    <button class="toggle-btn float-start"
+                                        onclick="toggleChildren('main-revenue-children', this)">▼</button>
+                                </div>
+                                <div id="main-revenue-children" class="account-children">
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">411</span>
+                                            المبيعات
+                                        </div>
+                                    </div>
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">412</span>
+                                            الخصم على المبيعات
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- المصروفات -->
+                    <div class="account-item">
+                        <div class="account-header level-1">
+                            <span class="account-code">500</span>
+                            <strong>المصروفات</strong>
+                            <button class="toggle-btn float-start"
+                                onclick="toggleChildren('expenses-children', this)">▼</button>
+                        </div>
+                        <div id="expenses-children" class="account-children">
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">510</span>
+                                    تكلفة المبيعات
+                                    <button class="toggle-btn float-start"
+                                        onclick="toggleChildren('cost-of-sales-children', this)">▼</button>
+                                </div>
+                                <div id="cost-of-sales-children" class="account-children">
+                                    <div class="account-item">
+                                        <div class="account-header level-3">
+                                            <span class="account-code">511</span>
+                                            المشتريات
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">520</span>
+                                    مصاريف البيع والتسويق
+                                </div>
+                            </div>
+                            <div class="account-item">
+                                <div class="account-header level-2">
+                                    <span class="account-code">530</span>
+                                    مصاريف إدارية وعمومية
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- التوقيع -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <div style="border-top: 1px solid #333; padding-top: 20px; width: 50%; margin: 0 auto;">
+                    <p>مدير الشؤون المالية</p>
+                    <p>............................</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تعيين تاريخ الطباعة
+        document.getElementById('printDate').textContent = new Date().toLocaleDateString('ar-EG');
+
+        // وظيفة تبديل العرض/الإخفاء
+        function toggleChildren(elementId, button) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none') {
+                element.style.display = 'block';
+                button.textContent = '▼';
+            } else {
+                element.style.display = 'none';
+                button.textContent = '▶';
+            }
+        }
+
+        // فتح جميع العناصر
+        function expandAll() {
+            document.querySelectorAll('.account-children').forEach(element => {
+                element.style.display = 'block';
+            });
+            document.querySelectorAll('.toggle-btn').forEach(button => {
+                button.textContent = '▼';
+            });
+        }
+
+        // غلق جميع العناصر
+        function collapseAll() {
+            document.querySelectorAll('.account-children').forEach(element => {
+                element.style.display = 'none';
+            });
+            document.querySelectorAll('.toggle-btn').forEach(button => {
+                button.textContent = '▶';
+            });
+        }
+
+        // البحث في الحسابات
+        document.getElementById('searchAccounts').addEventListener('input', function (e) {
+            const searchText = e.target.value.toLowerCase();
+            document.querySelectorAll('.account-header').forEach(header => {
+                const text = header.textContent.toLowerCase();
+                if (text.includes(searchText)) {
+                    header.style.backgroundColor = '#fffacd';
+                    // إظهار الأباء
+                    let parent = header.closest('.account-item');
+                    while (parent) {
+                        const children = parent.querySelector('.account-children');
+                        if (children) children.style.display = 'block';
+                        parent = parent.parentElement?.closest('.account-item');
+                    }
+                } else {
+                    header.style.backgroundColor = '';
+                }
+            });
+        });
+
+        // تهيئة أولية - إظهار المستوى الأول فقط
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.account-children').forEach(element => {
+                element.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+
+</html>
